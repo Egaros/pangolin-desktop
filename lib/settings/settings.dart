@@ -26,6 +26,8 @@ import 'package:Pangolin/settings/pages/security.dart';
 import 'package:Pangolin/settings/pages/sound.dart';
 import 'package:Pangolin/settings/pages/updates.dart';
 import 'package:Pangolin/themes/customization_manager.dart';
+import 'package:Pangolin/widgets/blur.dart';
+import 'package:Pangolin/widgets/transparentRoute.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:ui';
@@ -75,7 +77,6 @@ class Settings extends StatelessWidget {
             // When navigating to the "/" route, build the FirstScreen widget.
             '/': (context) => SettingsPage(title: 'Settings'),
             // When navigating to the "/second" route, build the SecondScreen widget.
-            '/search': (context) => Search(),
           },
         );
       }),
@@ -266,7 +267,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                 //elevation: 5.0,
                                 child: GestureDetector(
                                   onTap: () {
-                                    Navigator.of(context).pushNamed("/search");
+                                    Navigator.of(context).push(TransparentRoute(
+                                        builder: (BuildContext context) =>
+                                            Search()));
                                   },
                                   child: new Container(
                                     width: 700,
@@ -409,55 +412,58 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: Colors.white,
-        child: Center(
-          child: Hero(
-            tag: "search",
-            child: Material(
-              color: Theme.of(context).cardColor,
-              borderRadius: const BorderRadius.all(const Radius.circular(25)),
-              //elevation: 5.0,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: new Container(
-                  width: 700,
-                  height: 45.0,
-                  margin: new EdgeInsets.only(left: 10, right: 5),
-                  child: new Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      new Expanded(
-                          child: new TextField(
-                        autofocus: true,
-                        style: new TextStyle(
-                          color: Colors.grey[900],
-                          fontSize: 15,
-                        ),
-                        maxLines: 1,
-                        decoration: new InputDecoration(
-                            hintStyle: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyText1.color,
-                              fontSize: 15,
-                            ),
-                            icon: Icon(
-                              Icons.search,
-                              color: Color(HiveManager.get("accentColorValue")),
-                            ),
-                            hintText: 'Search settings...',
-                            border: InputBorder.none),
-                        onSubmitted: null,
-                        controller: editingController,
-                      ))
-                    ],
+    return Blur(
+      child: Container(
+          color: Colors.black.withOpacity(0.7),
+          child: Center(
+            child: Hero(
+              tag: "search",
+              child: Material(
+                color: Theme.of(context).cardColor,
+                borderRadius: const BorderRadius.all(const Radius.circular(25)),
+                //elevation: 5.0,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: new Container(
+                    width: 700,
+                    height: 45.0,
+                    margin: new EdgeInsets.only(left: 10, right: 5),
+                    child: new Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        new Expanded(
+                            child: new TextField(
+                          autofocus: true,
+                          style: new TextStyle(
+                            color: Colors.grey[900],
+                            fontSize: 15,
+                          ),
+                          maxLines: 1,
+                          decoration: new InputDecoration(
+                              hintStyle: TextStyle(
+                                color:
+                                    Theme.of(context).textTheme.bodyText1.color,
+                                fontSize: 15,
+                              ),
+                              icon: Icon(
+                                Icons.search,
+                                color:
+                                    Color(HiveManager.get("accentColorValue")),
+                              ),
+                              hintText: 'Search settings...',
+                              border: InputBorder.none),
+                          onSubmitted: null,
+                          controller: editingController,
+                        ))
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 }
